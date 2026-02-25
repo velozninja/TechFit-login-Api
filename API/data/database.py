@@ -13,7 +13,7 @@ class Usuario(Base):
     email = Column(String(50), unique=True, nullable=False)
     senha = Column(String(255), nullable=False, unique=True)
 
-database = create_engine("sqlite:///database.db", echo=True)
+database = create_engine("postgresql:///database.db", echo=True)
 Base.metadata.create_all(database)
 Session = sessionmaker(bind=database)
 
