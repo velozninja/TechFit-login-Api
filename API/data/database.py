@@ -19,33 +19,31 @@ Session = sessionmaker(bind=database)
 
 
 def add_user(nome, email, senha):
-    new_user = Usuario(nome=nome, email=email, senha=senha)
-    user = Usuario(nome=nome, email=email, senha=senha)
-    if user == new_user:
-        logging.info(f"User {nome} already exists.")
-        return
     session = Session()
+    existing_user = session.query(Usuario).filter_by(email=email).first()
+    if existing_user:
+        logging.info(f"User {nome} already exists.")
+        session.close()
+        return None
+    new_user = Usuario(nome=nome, email=email, senha=senha)
     session.add(new_user)
     session.commit()
     session.close()
     return new_user
 
 def remove_user(email):
-
     session = Session()
     user_to_remove = session.query(Usuario).filter_by(email=email).first()
     if user_to_remove:
         logging.info(f"User {user_to_remove.nome} found for removal.")
-        return
-    if user_to_remove:
-  
         session.delete(user_to_remove)
-        logging.info("User removed successfully.")
         session.commit()
+        logging.info("User removed successfully.")
     session.close()
 def get_user_by_email(email):
     session = Session()
     user = session.query(Usuario).filter_by(email=email).first()
-    logging.info("User retrieved successfully.")
+    if user:
+        logging.info("User retrieved successfully.")
     session.close()
     return user

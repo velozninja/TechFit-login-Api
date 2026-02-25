@@ -1,12 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from data.login import register_user
 from data.login import get_user_by_email
 from data.login import remove_user
 from data.database import Session, Usuario
 from data.valid import Userschema
 import logging
-session = Session()
-
 
 login_api = FastAPI()
 @login_api.get("/home")
@@ -15,8 +13,13 @@ def home():
 
 @login_api.post("/register")
 def register(user: Userschema):
-    register_user(user.name, user.email, user.password)
-    logging.info(f"User {user.name} registered successfully.")
+    get_user = get_user_by_email(user.email)
+    if get_user:
+        logging.warning(f"Attempt to register with existing email: {user.email}")
+        raise HTTPException(status_code=400, detail="User already exists.")
+    success = register_user(user.name, user.email, user.password)
+    if not success:
+        raise HTTPException(status_code=400, detail="User already exists.")
     return {"message": "User registered successfully."}
 
 @login_api.get("/user")
