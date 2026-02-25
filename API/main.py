@@ -40,3 +40,6 @@ def get_all_users():
     users = session.query(Usuario).all()
     session.close()
     return {"message": "get all users successfully.", "users": users}
+
+# Vercel compatibility
+app = login_api
