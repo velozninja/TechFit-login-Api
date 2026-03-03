@@ -2,6 +2,8 @@ from pydantic import BaseModel, EmailStr, field_validator
 import re
 import logging
 
+from fastapi import HTTPException
+
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 aproved = False
@@ -29,8 +31,7 @@ class Userschema(BaseModel):
             if pontuação < 3:
                 aproved = False
                 logging.warning('Password validation failed: insufficient character types')
-
-                raise ValueError('Password must contain at least 3 of the following: uppercase letters, lowercase letters, numbers, special characters')
+                raise HTTPException(status_code=400, detail='Password must contain at least 3 of the following: uppercase letters, lowercase letters, numbers, special characters')
 
 
         

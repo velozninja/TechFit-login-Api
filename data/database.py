@@ -1,20 +1,24 @@
-from sqlalchemy import String, create_engine, Integer
+# -*- coding: utf-8 -*-
+from sqlalchemy import String, create_engine, Integer, Column
 from sqlalchemy.orm import sessionmaker, declarative_base
-from sqlalchemy import Column
 import logging
+try:
+    from .config import DATABASE_URL
+except ImportError:
+    from config import DATABASE_URL
 
 Base = declarative_base()
 
 class Usuario(Base):
-    __tablename__ = "usuarios"
+    __tablename__ = "user_login"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(50), nullable=False)
     email = Column(String(50), unique=True, nullable=False)
-    senha = Column(String(255), nullable=False, unique=True)
+    senha = Column(String(255), nullable=False)
 
-database = create_engine("postgresql:///database.db", echo=True)
-Base.metadata.create_all(database)
+database = create_engine(DATABASE_URL, echo=True)
+
 Session = sessionmaker(bind=database)
 
 

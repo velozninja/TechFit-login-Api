@@ -1,15 +1,13 @@
 try:
     from . import database as db
     from . import valid as vd
-    import bcrypt
-    import logging
-    from sqlalchemy.orm import sessionmaker
 except ImportError:
     import database as db
     import valid as vd
-    import bcrypt
-    import logging
-    import sqlalchemy.orm as sessionmaker
+
+import bcrypt
+import logging
+from sqlalchemy.orm import sessionmaker
 
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')

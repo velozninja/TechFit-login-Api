@@ -1,7 +1,9 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from fastapi import FastAPI, HTTPException
-from data.login import register_user
-from data.login import get_user_by_email
-from data.login import remove_user
+from data.login import register_user, get_user_by_email, remove_user
 from data.database import Session, Usuario
 from data.valid import Userschema
 import logging
@@ -41,5 +43,7 @@ def get_all_users():
     session.close()
     return {"message": "get all users successfully.", "users": users}
 
-# Vercel compatibility
-app = login_api
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(login_api, host="192.168.101.13", port=8000)
