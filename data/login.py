@@ -1,3 +1,7 @@
+"""User authentication and management package.
+
+This module provides functions for user registration, retrieval, and deletion.
+"""
 try:
     from . import database as db
     from . import valid as vd
@@ -9,9 +13,8 @@ import bcrypt
 import logging
 from sqlalchemy.orm import sessionmaker
 
-
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-session = db.Session()  # Create a session at the module level to be used in functions
+session = db.Session()
 
 def register_user(name: str, email: str, password: str):
     try:
@@ -19,7 +22,7 @@ def register_user(name: str, email: str, password: str):
         psw = user_data.password.encode()
         hashed_password = bcrypt.hashpw(psw, bcrypt.gensalt())
         
-        result = db.add_user(nome=user_data.name, email=user_data.email, senha=hashed_password)
+        result = db.add_user(name=user_data.name, email=user_data.email, password=hashed_password)
         if result is None:
             logging.warning(f"User with email {email} already exists.")
             return False

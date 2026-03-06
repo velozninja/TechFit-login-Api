@@ -1,13 +1,14 @@
+"""data validation models and functions"""
+
 from pydantic import BaseModel, EmailStr, field_validator
 import re
 import logging
-
 from fastapi import HTTPException
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 aproved = False
-
+"""this class is the schema for the user data validation, it validate the name, email and password of the user"""
 class Userschema(BaseModel):
     name: str
     email: EmailStr
@@ -15,6 +16,7 @@ class Userschema(BaseModel):
 
     @field_validator('password')
     @classmethod
+  
     def validate_password(cls, value):
         pontuação = 0
         global aproved
