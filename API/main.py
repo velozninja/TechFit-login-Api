@@ -52,4 +52,4 @@ def get_all_users():
 """this function run the API in the host"""
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(login_api, host="192.168.101.13", port=8000)
+    uvicorn.run(login_api, host="0.0.0.0", port=8000)
