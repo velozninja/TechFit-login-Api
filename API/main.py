@@ -11,9 +11,9 @@ import logging
 
 
 login_api = FastAPI()
-@login_api.get("/home")
+@login_api.get("/healtz")
 def home():
-    return {"message": "Welcome to the home page."}
+    return {"status": "ok".}
 """this function endpoint register a new user"""
 @login_api.post("/register")
 def register(user: Userschema):
