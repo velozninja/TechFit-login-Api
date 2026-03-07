@@ -11,8 +11,11 @@ import logging
 
 
 login_api = FastAPI()
-@login_api.get("/healtz")
+@login_api.get("/")
 def home():
+    return {"status": "ok"}
+@login_api.get("/healtz")
+def healtz():
     return {"status": "ok"}
 """this function endpoint register a new user"""
 @login_api.post("/register")
@@ -26,7 +29,7 @@ def register(user: Userschema):
         raise HTTPException(status_code=400, detail="User already exists.")
     return {"message": "User registered successfully."}
 """this function endpoint get the user by email"""
-@login_api.get("/user")
+@login_api.post("/user")
 def get_user(email: str):
     user = get_user_by_email(email)
     if user:
