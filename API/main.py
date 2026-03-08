@@ -7,10 +7,12 @@ from fastapi import FastAPI, HTTPException
 from data.login import register_user, get_user_by_email, remove_user
 from data.database import Session, Usuario
 from data.valid import Userschema
+from routers import auth
 import logging
 
 
 login_api = FastAPI()
+login_api.include_router(auth.route, prefix="/auth", tags=["auth"])
 @login_api.get("/")
 def home():
     return {"status": "ok"}
@@ -29,13 +31,7 @@ def register(user: Userschema):
         raise HTTPException(status_code=400, detail="User already exists.")
     return {"message": "User registered successfully."}
 """this function endpoint get the user by email"""
-@login_api.post("/user")
-def get_user(email: str):
-    user = get_user_by_email(email)
-    if user:
-        return {"message": "get user successfully.", "user": user}
-    else:
-        return {"message": "User not found."}
+
 """this function endpoint delete the user by email"""
 @login_api.delete("/user")
 def delete_user(email: str):
@@ -55,4 +51,4 @@ def get_all_users():
 """this function run the API in the host"""
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(login_api, host="0.0.0.0", port=8000)
+    uvicorn.run(login_api, host="0.0.0.0", port=8000, )

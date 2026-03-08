@@ -50,7 +50,15 @@ def remove_user(email):
 """this function get the user from the database by email, if the user exist return it, else return None"""
 def get_user_by_email(email):
     session = Session()
-    user = session.query(Usuario).filter_by(email=email).first()
+    user = session.query(Usuario).filter_by(email=email, ).first()
+    if user:
+        logging.info("User retrieved successfully.")
+    session.close()
+    return user
+
+def get_user_psw(password):
+    session = Session()
+    user = session.query(Usuario).filter_by(password=password).first()
     if user:
         logging.info("User retrieved successfully.")
     session.close()

@@ -13,6 +13,7 @@ import bcrypt
 import logging
 from sqlalchemy.orm import sessionmaker
 
+
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 session = db.Session()
 
@@ -20,7 +21,7 @@ def register_user(name: str, email: str, password: str):
     try:
         user_data = vd.Userschema(name=name, email=email, password=password)
         psw = user_data.password.encode()
-        hashed_password = bcrypt.hashpw(psw, bcrypt.gensalt())
+        hashed_password = bcrypt.hashpw(psw, bcrypt.gensalt()).decode()
         
         result = db.add_user(name=user_data.name, email=user_data.email, password=hashed_password)
         if result is None:
@@ -41,7 +42,7 @@ def get_user_by_email(email: str):
     try:
         user = db.get_user_by_email(email)
         if user:
-            logging.info(f"User with email {email} retrieved successfully.")
+            logging.info(f"User with email {email} was retrieved successfully.")
             return user
         else:
             logging.warning(f"No user found with email {email}.")
@@ -49,4 +50,10 @@ def get_user_by_email(email: str):
     except Exception as e:
         logging.error(f"Error retrieving user: {e}")
         return None
-                                                                                                      
+def verify_password(input_password: str, stored_hashed: str) -> bool:
+    db.get_user_psw(stored_hashed)
+    if not stored_hashed:
+        logging.warning("No stored password hash provided for verification.")
+        return False
+    return bcrypt.checkpw(input_password.encode(), stored_hashed.encode())
+                                                       
